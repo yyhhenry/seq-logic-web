@@ -1,0 +1,13 @@
+@import '/node_modules/element-plus/theme-chalk/index.css';
+@import '/node_modules/element-plus/theme-chalk/dark/css-vars.css';
+
+*,
+*::before,
+*::after {
+  margin: 0;
+}
+
+body {
+  color: var(--el-text-color);
+  background: var(--el-bg-color);
+}
