@@ -8,10 +8,17 @@ import {
 } from 'luoluo-vue-components';
 import { useFileSystemAccess, useTitle } from '@vueuse/core';
 import websiteName from '@/utils/website-name';
-import { ElButton, ElImage, ElSpace } from 'element-plus';
-import { Diagram, getBlankDiagramStorage, isDiagramStorage } from '@/utils/seq-logic';
+import { ElButton, ElDialog, ElImage, ElSpace } from 'element-plus';
+import {
+  Diagram,
+  getBlankDiagramStorage,
+  isDiagramStorage,
+  type DiagramStorage,
+} from '@/utils/seq-logic';
 import { computed, ref } from 'vue';
 import EditorView from './EditorView.vue';
+import SamplesDialog from './editor-dialogs/SamplesDialog.vue';
+import { getSample } from '@/utils/seq-logic-samples';
 const fileAccess = useFileSystemAccess({
   dataType: 'Text',
   types: [{ description: 'SeqLogic Diagram', accept: { 'text/json': ['.seq.json'] } }],
@@ -40,19 +47,13 @@ const onSave = async (newContent?: string) => {
   }
 };
 const onOpen = async () => {
-  if (fileAccess.file.value) {
-    await fileAccess.save();
-  }
   await fileAccess.open();
   await onSave();
   onReload();
 };
-const onNew = async () => {
-  if (fileAccess.file.value) {
-    await fileAccess.save();
-  }
+const onNew = async (storage?: DiagramStorage) => {
   await fileAccess.create();
-  content.value = JSON.stringify(getBlankDiagramStorage());
+  content.value = JSON.stringify(storage ?? getBlankDiagramStorage());
   await fileAccess.save();
   onReload();
 };
@@ -61,6 +62,15 @@ const saveDiagram = async () => {
     diagram.value.modified = false;
     await onSave(JSON.stringify(diagram.value.toStorage()));
   }
+};
+const samplesDialog = ref(false);
+const onOpenSample = async (url: string) => {
+  samplesDialog.value = false;
+  const sample = await getSample(url);
+  await onNew(sample);
+};
+const onShowSamples = () => {
+  samplesDialog.value = true;
 };
 </script>
 
@@ -75,8 +85,9 @@ const saveDiagram = async () => {
     </template>
     <template #header-extra>
       <ElSpace>
+        <ElButton :type="'danger'" @click="onShowSamples">示例</ElButton>
         <ElButton :type="'danger'" @click="onNew()">新建</ElButton>
-        <ElButton :type="'primary'" @click="onOpen()">打开</ElButton>
+        <ElButton :type="'primary'" @click="onOpen">打开</ElButton>
         <SwitchDark />
       </ElSpace>
     </template>
@@ -87,4 +98,7 @@ const saveDiagram = async () => {
       </CenterLayout>
     </MiddleLayout>
   </PageLayout>
+  <ElDialog v-model="samplesDialog">
+    <SamplesDialog @open="onOpenSample" />
+  </ElDialog>
 </template>

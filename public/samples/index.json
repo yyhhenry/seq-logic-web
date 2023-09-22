@@ -1,0 +1,7 @@
+{
+  "gates": "gates.seq.json",
+  "初始化": "初始化.seq.json",
+  "触发器": "触发器.seq.json",
+  "计数器": "计数器.seq.json",
+  "锁存器": "锁存器.seq.json"
+}

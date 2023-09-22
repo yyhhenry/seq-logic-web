@@ -27,7 +27,7 @@ const positions = computed(() =>
   angleOffset.map((offset) => ({
     x: mid.value.x + gateRadius * Math.cos(angle.value + offset),
     y: mid.value.y + gateRadius * Math.sin(angle.value + offset),
-  }))
+  })),
 );
 const gate = computed(() => {
   const toStr = (i: number) => `${positions.value[i].x} ${positions.value[i].y}`;
