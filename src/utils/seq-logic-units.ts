@@ -17,7 +17,7 @@ export async function getUnit(name: string) {
   const unitsMap = await getUnitsMap();
   const url = unitsMap.get(name);
   if (url != undefined) {
-    const data = await (await fetch(unitsMap.get(name)!)).json();
+    const data = await (await fetch(url)).json();
     if (isDiagramStorage(data)) {
       return data;
     }
