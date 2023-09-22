@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { getUnitsMap } from '@/utils/seq-logic-units';
 import { asyncComputed } from '@vueuse/core';
-import { ElTabs, ElTabPane, ElInput, ElCard, ElRow, ElScrollbar } from 'element-plus';
+import {
+  ElInput,
+  ElSpace,
+  ElButton,
+  ElDivider,
+} from 'element-plus';
 import { computed, ref } from 'vue';
+import { CenterLayout, HeaderText } from 'luoluo-vue-components';
+import { Search } from '@element-plus/icons-vue';
 defineEmits<{
   (event: 'add', name: string): void;
 }>();
@@ -15,20 +22,18 @@ const units = computed(() =>
 );
 </script>
 <template>
-  <ElInput v-model="text"></ElInput>
-  <ElCard v-for="name of units" @click="$emit('add', name)" class="unit-card" :key="name">
-    <ElRow :justify="'center'" :align="'middle'">
-      {{ name }}
-    </ElRow>
-  </ElCard>
+  <ElInput v-model="text" :prefix-icon="Search"></ElInput>
+  <ElDivider />
+  <ElSpace wrap>
+    <ElButton
+      v-for="name of units"
+      @click="$emit('add', name)"
+      :key="name"
+      :style="{ width: '200px' }"
+    >
+      <CenterLayout>
+        <HeaderText> {{ name }}</HeaderText>
+      </CenterLayout>
+    </ElButton>
+  </ElSpace>
 </template>
-
-<style lang="scss" scoped>
-.unit-card {
-  margin: 5px;
-  :hover {
-    cursor: pointer;
-    background-color: var(--color-background-mute);
-  }
-}
-</style>

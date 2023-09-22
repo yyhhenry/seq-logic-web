@@ -1,0 +1,9 @@
+{
+  "and": "and.seq.json",
+  "d-latch": "d-latch.seq.json",
+  "d-trigger": "d-trigger.seq.json",
+  "nand": "nand.seq.json",
+  "not": "not.seq.json",
+  "or": "or.seq.json",
+  "xor": "xor.seq.json"
+}
