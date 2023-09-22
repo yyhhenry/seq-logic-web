@@ -7,7 +7,6 @@ import {
   PageLayout,
   SwitchDark,
 } from 'luoluo-vue-components';
-import { CloseBold } from '@element-plus/icons-vue';
 import { useFileSystemAccess, useTitle } from '@vueuse/core';
 import websiteName from '@/utils/website-name';
 import { ElButton, ElImage, ElSpace } from 'element-plus';
@@ -20,7 +19,13 @@ const fileAccess = useFileSystemAccess({
   excludeAcceptAllOption: true,
 });
 const content = fileAccess.data;
-const onSave = async () => {
+const onReload = () => {
+  // Not implemented
+};
+const onSave = async (newContent?: string) => {
+  if (newContent) {
+    content.value = newContent;
+  }
   if (fileAccess.file.value) {
     await fileAccess.save();
   }
@@ -31,6 +36,7 @@ const onOpen = async () => {
   }
   await fileAccess.open();
   await onSave();
+  onReload();
 };
 const onNew = async () => {
   if (fileAccess.file.value) {
@@ -39,6 +45,7 @@ const onNew = async () => {
   await fileAccess.create();
   content.value = JSON.stringify(getBlankDiagramStorage());
   await fileAccess.save();
+  onReload();
 };
 </script>
 
@@ -49,7 +56,7 @@ const onNew = async () => {
         <ElImage src="./favicon.png" fit="scale-down" :style="{ height: '3em' }" />
         <HeaderText>{{ websiteName }}</HeaderText>
         <span v-if="fileAccess.file.value">{{ fileAccess.file.value.name }}</span>
-        <ElButton :type="'danger'" :icon="CloseBold" circle v-if="fileAccess.file.value"></ElButton>
+        <ElButton :type="'danger'" @click="onSave()" v-if="fileAccess.file.value">保存</ElButton>
       </ElSpace>
     </template>
     <template #header-extra>
