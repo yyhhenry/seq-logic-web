@@ -457,8 +457,8 @@ export class Diagram {
           successors.add(successor);
         }
       }
-      for (const succ of successors) {
-        this.activate(succ);
+      for (const successor of successors) {
+        this.activate(successor);
       }
     }
     this.toggle.delete(this.current++);
@@ -585,11 +585,13 @@ export class Diagram {
     }
   }
   addNode(node: Node) {
+    node = cloneDeep(node);
     const id = uuid();
     this.nodes.set(id, node);
     return id;
   }
   addWire(wire: Wire) {
+    wire = cloneDeep(wire);
     const id = uuid();
     if (wire.start === wire.end) {
       return;
@@ -603,6 +605,7 @@ export class Diagram {
     return id;
   }
   addText(text: Text) {
+    text = cloneDeep(text);
     const id = uuid();
     this.texts.set(id, text);
     return id;
