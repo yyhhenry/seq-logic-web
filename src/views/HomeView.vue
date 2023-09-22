@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   CenterLayout,
-  FlexCard,
   HeaderText,
   MiddleLayout,
   PageLayout,
@@ -10,17 +9,27 @@ import {
 import { useFileSystemAccess, useTitle } from '@vueuse/core';
 import websiteName from '@/utils/website-name';
 import { ElButton, ElImage, ElSpace } from 'element-plus';
-import { getBlankDiagramStorage } from '@/utils/seq-logic';
-import { isString } from 'lodash';
-useTitle(websiteName);
+import { Diagram, getBlankDiagramStorage, isDiagramStorage } from '@/utils/seq-logic';
+import { computed, ref } from 'vue';
+import EditorView from './EditorView.vue';
 const fileAccess = useFileSystemAccess({
   dataType: 'Text',
   types: [{ description: 'SeqLogic Diagram', accept: { 'text/json': ['.seq.json'] } }],
   excludeAcceptAllOption: true,
 });
+const pageTitle = computed(() =>
+  fileAccess.file.value ? `${fileAccess.file.value.name} - ${websiteName}` : websiteName,
+);
+useTitle(pageTitle);
 const content = fileAccess.data;
+const diagram = ref<Diagram>();
 const onReload = () => {
-  // Not implemented
+  const storage = JSON.parse(content.value ?? '{}');
+  if (isDiagramStorage(storage)) {
+    diagram.value = new Diagram(storage);
+  } else {
+    throw new Error('Invalid diagram storage');
+  }
 };
 const onSave = async (newContent?: string) => {
   if (newContent) {
@@ -47,6 +56,12 @@ const onNew = async () => {
   await fileAccess.save();
   onReload();
 };
+const saveDiagram = async () => {
+  if (diagram.value?.modified) {
+    onSave(JSON.stringify(diagram.value.toStorage()));
+    diagram.value.modified = false;
+  }
+};
 </script>
 
 <template>
@@ -56,7 +71,6 @@ const onNew = async () => {
         <ElImage src="./favicon.png" fit="scale-down" :style="{ height: '3em' }" />
         <HeaderText>{{ websiteName }}</HeaderText>
         <span v-if="fileAccess.file.value">{{ fileAccess.file.value.name }}</span>
-        <ElButton :type="'danger'" @click="onSave()" v-if="fileAccess.file.value">保存</ElButton>
       </ElSpace>
     </template>
     <template #header-extra>
@@ -66,9 +80,7 @@ const onNew = async () => {
         <SwitchDark />
       </ElSpace>
     </template>
-    <FlexCard v-if="isString(content)">
-      <p>{{ content }}</p>
-    </FlexCard>
+    <EditorView v-if="diagram" :save="saveDiagram" :diagram="diagram" />
     <MiddleLayout v-else>
       <CenterLayout>
         <HeaderText>打开文件以开始</HeaderText>

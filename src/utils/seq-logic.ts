@@ -2,7 +2,7 @@ import { cloneDeep, random } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { type MaybeObject, isObjectMaybe, isObjectOf } from './types';
 import { ElMessage } from 'element-plus';
-import { animeFrame } from './anime-frame';
+import animeFrame from './anime-frame';
 // import { fs } from '@tauri-apps/api';
 interface Coordinate {
   x: number;
@@ -291,17 +291,6 @@ export function isWiresValid(storage: DiagramStorage) {
     return false;
   }
   return true;
-}
-export async function loadDiagramStorageFile(pathname: string): Promise<DiagramStorage> {
-  pathname;
-  throw new Error('Cannot access fs');
-  const content = '';
-  const diagram = JSON.parse(content);
-  if (isDiagramStorage(diagram)) {
-    return diagram;
-  } else {
-    throw new Error('Invalid file');
-  }
 }
 /**
  * A diagram.
@@ -652,18 +641,11 @@ export class Diagram {
       viewport: this.viewport,
     });
   }
-  static async loadFile(pathname: string) {
-    return new Diagram(await loadDiagramStorageFile(pathname));
-  }
   fetchClock() {
     this.parse();
   }
-  async saveFile(pathname: string) {
-    pathname;
-    throw new Error('Cannot access fs');
-    // const storage = this.toStorage();
-    // await fs.writeFile(pathname, JSON.stringify(storage));
-    // this.modified = false;
+  resetViewport() {
+    this.viewport = { x: 0, y: 0, scale: 1 };
   }
 }
 export const getBlankDiagramStorage = (): DiagramStorage => {
