@@ -58,8 +58,8 @@ const onNew = async () => {
 };
 const saveDiagram = async () => {
   if (diagram.value?.modified) {
-    onSave(JSON.stringify(diagram.value.toStorage()));
     diagram.value.modified = false;
+    await onSave(JSON.stringify(diagram.value.toStorage()));
   }
 };
 </script>

@@ -10,13 +10,13 @@ import {
   ElDivider,
   ElDialog,
   ElSpace,
-ElButton,
+  ElButton,
 } from 'element-plus';
-import { LRMenu, PageLayout } from 'luoluo-vue-components';
+import { HeaderText, LRMenu, PageLayout } from 'luoluo-vue-components';
 import { Diagram, isDiagramStorage } from '@/utils/seq-logic';
-import { computed, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { getPopularUnits, getUnit } from '@/utils/seq-logic-units';
-import { useEventListener, useIntervalFn, useMouseInElement } from '@vueuse/core';
+import { useDebounceFn, useEventListener, useIntervalFn, useMouseInElement } from '@vueuse/core';
 import animeFrame from '@/utils/anime-frame';
 import EditNode from './editor-dialogs/EditNode.vue';
 import EditWire from './editor-dialogs/EditWire.vue';
@@ -167,9 +167,13 @@ const onResetTime = () => {
 const onResetViewport = () => {
   props.diagram.resetViewport();
 };
-const onSave = async () => {
-  await props.save();
-};
+const onSave = useDebounceFn(
+  async () => {
+    await props.save();
+  },
+  1000,
+  { maxWait: 5000 },
+);
 
 const addingNode = ref<string>();
 const wireEnd = ref<string>();
@@ -386,11 +390,11 @@ useIntervalFn(() => {
     }
   }
 }, 1000 / 60);
-useIntervalFn(() => {
+watchEffect(() => {
   if (props.diagram.modified) {
     onSave();
   }
-}, 5000);
+});
 const onWheel = (e: WheelEvent) => {
   const viewport = props.diagram.viewport;
   const [x, y] = [mouse.elementX.value, mouse.elementY.value];
@@ -638,7 +642,7 @@ const onShowUnits = () => {
     <template #header>
       <ElSpace>
         <ElButton :type="'danger'" @click="onSave()">保存</ElButton>
-        <p>{{ diagram.modified ? '⛷️Modifying' : '😊Saved' }}</p>
+        <HeaderText>{{ diagram.modified ? '⛷️Modifying' : '😊Saved' }}</HeaderText>
       </ElSpace>
     </template>
     <template #header-extra>
@@ -743,6 +747,7 @@ const onShowUnits = () => {
           @wheel="(e) => onWheel(e)"
           @mousedown="(e) => onMouseDown(e, 'blank', '')"
           @mouseup="(e) => onMouseUp(e)"
+          @contextmenu="(e) => e.preventDefault()"
         >
           <g
             :transform="`scale(${diagram?.viewport.scale}), translate(${diagram?.viewport.x}, ${diagram?.viewport.y})`"
