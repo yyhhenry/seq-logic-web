@@ -17,6 +17,7 @@ useTitle(websiteName);
 const fileAccess = useFileSystemAccess({
   dataType: 'Text',
   types: [{ description: 'SeqLogic Diagram', accept: { 'text/json': ['.seq.json'] } }],
+  excludeAcceptAllOption: true,
 });
 const content = fileAccess.data;
 const onSave = async () => {
@@ -35,9 +36,7 @@ const onNew = async () => {
   if (fileAccess.file.value) {
     await fileAccess.save();
   }
-  await fileAccess.create({
-    suggestedName: 'new.seq.json',
-  });
+  await fileAccess.create();
   content.value = JSON.stringify(getBlankDiagramStorage());
   await fileAccess.save();
 };
