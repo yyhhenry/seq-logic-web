@@ -123,7 +123,7 @@ export class History<T> {
   }
   delete(id: string) {
     const origin = this.items.get(id);
-    if (origin == undefined) {
+    if (origin === undefined) {
       return;
     }
     const item = this.cache.get(id);
@@ -170,10 +170,10 @@ export class History<T> {
     this.cache = new Map();
   }
   hasUncommitted() {
-    return this.cache.size != 0;
+    return this.cache.size !== 0;
   }
   undo() {
-    if (this.cache.size != 0) {
+    if (this.cache.size !== 0) {
       throw new Error('Cannot undo while modifying.');
     }
     if (this.head <= 0) {
@@ -191,7 +191,7 @@ export class History<T> {
     return true;
   }
   redo() {
-    if (this.cache.size != 0) {
+    if (this.cache.size !== 0) {
       throw new Error('Cannot redo while modifying.');
     }
     if (this.head >= this.operations.length) {
@@ -210,7 +210,7 @@ export class History<T> {
   }
 }
 export const notNullAssertion = <T>(value: T | undefined | null): T => {
-  if (value == null) {
+  if (value === undefined || value === null) {
     throw new Error('value is null');
   }
   return value;
@@ -253,7 +253,7 @@ export const powerOnDuration = 1e12;
 export const validPoweredType = ['general', 'clock', 'power-on'] as const;
 export type ValidPoweredType = (typeof validPoweredType)[number];
 export const isValidPoweredType = (tab: string | number): tab is ValidPoweredType =>
-  typeof tab == 'string' && (validPoweredType as readonly unknown[]).includes(tab);
+  typeof tab === 'string' && (validPoweredType as readonly unknown[]).includes(tab);
 export const getPoweredType = (powered: boolean | Clock): ValidPoweredType => {
   if (typeof powered === 'boolean') {
     return 'general';
@@ -349,14 +349,14 @@ export class Diagram {
   }
   private activateAll() {
     for (const [id, value] of this.groupRoot.entries()) {
-      if (id == value) {
+      if (id === value) {
         this.activate(id);
       }
     }
   }
   private getGroupRoot(nodeId: string): string {
     const fa = required(this.groupRoot.get(nodeId));
-    if (fa == nodeId) {
+    if (fa === nodeId) {
       return nodeId;
     }
     const result = this.getGroupRoot(fa);
@@ -382,14 +382,14 @@ export class Diagram {
       this.wirePairSet.add(JSON.stringify([wire.end, wire.start]));
     }
     for (const id of this.nodes.keys()) {
-      if (this.status.get(id) == null) {
+      if (this.status.get(id) === null) {
         this.status.set(id, { active: false, powered: false });
       }
     }
     const needToRemove = new Set<string>();
     for (const [id, status] of this.status.entries()) {
       const node = this.nodes.get(id);
-      if (node == null) {
+      if (node === undefined) {
         needToRemove.add(id);
       } else {
         status.powered = getPowered(node.powered);
@@ -397,7 +397,7 @@ export class Diagram {
     }
     for (const id of needToRemove) {
       const nextTick = this.status.get(id)?.nextTick;
-      if (nextTick != null) {
+      if (nextTick !== undefined) {
         this.toggle.get(nextTick)?.delete(id);
       }
       this.status.delete(id);
@@ -409,7 +409,7 @@ export class Diagram {
       }
       const start = this.getGroupRoot(wire.start);
       const end = this.getGroupRoot(wire.end);
-      if (start == end) {
+      if (start === end) {
         continue;
       }
       this.groupRoot.set(start, end);
@@ -458,7 +458,7 @@ export class Diagram {
     for (const precursor of required(this.updatePrecursors.get(nodeId))) {
       result ||= !required(this.status.get(precursor)).active;
     }
-    if (result == status.active) {
+    if (result === status.active) {
       if (status.nextTick !== undefined) {
         (this.toggle.get(status.nextTick) ?? new Map()).delete(nodeId);
         status.nextTick = undefined;

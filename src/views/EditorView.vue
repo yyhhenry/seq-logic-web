@@ -226,7 +226,7 @@ const getNodeAtMouse = () => {
   let result = undefined as string | undefined;
   for (const [id, node] of props.diagram.nodes.entries()) {
     const [dx, dy] = [node.x - mouseInView.value.x, node.y - mouseInView.value.y];
-    if (id == addingNode.value) {
+    if (id === addingNode.value) {
       continue;
     }
     if (dx * dx + dy * dy < 100) {
@@ -246,11 +246,11 @@ const addWireProc = (commit = false) => {
     y: mouseInView.value.y,
     powered: false,
   };
-  if (wireEnd.value == undefined || end == undefined || end != wireEnd.value) {
+  if (wireEnd.value === undefined || end === undefined || end !== wireEnd.value) {
     props.diagram.clearUncommitted();
     addingNode.value = undefined;
     wireEnd.value = undefined;
-    if (nodeAtMouse == undefined) {
+    if (nodeAtMouse === undefined) {
       addingNode.value = props.diagram.addNode(node);
       wireEnd.value = addingNode.value;
     } else {
@@ -264,7 +264,7 @@ const addWireProc = (commit = false) => {
       });
     }
     props.diagram.parse();
-  } else if (addingNode.value != undefined) {
+  } else if (addingNode.value !== undefined) {
     props.diagram.nodes.set(addingNode.value, node);
   }
   const result = wireEnd.value;
@@ -427,17 +427,17 @@ const onMouseDown = (e: MouseEvent, itemType: ItemType | 'blank', id: string) =>
       x: mouseInView.value.x,
       y: mouseInView.value.y,
       mode:
-        e.ctrlKey || e.button == 2
+        e.ctrlKey || e.button === 2
           ? 'move-viewport'
           : e.shiftKey
-          ? 'box-toggle-select'
-          : itemType == 'blank'
-          ? 'box-select'
-          : 'drag-selected',
+            ? 'box-toggle-select'
+            : itemType === 'blank'
+              ? 'box-select'
+              : 'drag-selected',
       activated: false,
     };
     blockContentMenu.value = false;
-    if (e.button == 0) {
+    if (e.button === 0) {
       if (e.shiftKey) {
         if (itemType !== 'blank') {
           const itemsType = itemsTypeMap[itemType];
@@ -515,7 +515,7 @@ const onMouseUp = (e: MouseEvent) => {
 };
 const onMove = (e: MouseEvent) => {
   if (mousePath.value !== undefined) {
-    if (mousePath.value.mode == 'move-viewport') {
+    if (mousePath.value.mode === 'move-viewport') {
       const [dx, dy] = [
         mouseInView.value.x - mousePath.value.x,
         mouseInView.value.y - mousePath.value.y,
@@ -532,7 +532,7 @@ const onMove = (e: MouseEvent) => {
         viewport.x += e.movementX / viewport.scale;
         viewport.y += e.movementY / viewport.scale;
       }
-    } else if (mousePath.value.mode == 'drag-selected') {
+    } else if (mousePath.value.mode === 'drag-selected') {
       const [dx, dy] = [
         mouseInView.value.x - mousePath.value.x,
         mouseInView.value.y - mousePath.value.y,
@@ -641,7 +641,7 @@ const onShowUnits = () => {
   <PageLayout :style="{ height: '100%' }">
     <template #header>
       <ElSpace>
-        <ElButton :type="'danger'" @click="onSave()">保存</ElButton>
+        <ElButton :type="'danger'" @click="onSave()">Force Save</ElButton>
         <HeaderText>{{ diagram.modified ? '⛷️Modifying' : '😊Saved' }}</HeaderText>
       </ElSpace>
     </template>

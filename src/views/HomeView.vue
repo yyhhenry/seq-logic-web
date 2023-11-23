@@ -85,16 +85,16 @@ const onShowSamples = () => {
     </template>
     <template #header-extra>
       <ElSpace>
-        <ElButton :type="'danger'" @click="onShowSamples">示例</ElButton>
-        <ElButton :type="'danger'" @click="onNew()">新建</ElButton>
-        <ElButton :type="'primary'" @click="onOpen">打开</ElButton>
+        <ElButton :type="'danger'" @click="onShowSamples">Samples</ElButton>
+        <ElButton :type="'danger'" @click="onNew()">New</ElButton>
+        <ElButton :type="'primary'" @click="onOpen">Open</ElButton>
         <SwitchDark />
       </ElSpace>
     </template>
     <EditorView v-if="diagram" :save="saveDiagram" :diagram="diagram" />
     <MiddleLayout v-else>
       <CenterLayout>
-        <HeaderText>打开文件以开始</HeaderText>
+        <HeaderText> Open a file or create a new one to start </HeaderText>
       </CenterLayout>
     </MiddleLayout>
   </PageLayout>

@@ -11,7 +11,7 @@ defineEmits<{
 const text = ref('');
 const allUnits = asyncComputed(async () => [...(await getUnitsMap()).keys()], []);
 const units = computed(() =>
-  text.value == ''
+  text.value === ''
     ? allUnits.value
     : allUnits.value.filter((unit) => unit.toLowerCase().includes(text.value.toLowerCase())),
 );
