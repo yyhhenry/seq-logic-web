@@ -1,13 +1,17 @@
 import { isString } from 'lodash';
 import { isDiagramStorage } from './seq-logic';
-import { isObjectOf } from './types';
-export const samplesIndexUrl = new URL('samples/index.json', window.location.href);
+import { isRecordOf } from './type-guards';
+export const samplesIndexUrl = new URL(
+  'samples/index.json',
+  window.location.href,
+);
 export async function getSamplesMap() {
   const data = await (await fetch(samplesIndexUrl)).json();
-  if (isObjectOf(data, isString)) {
+  if (isRecordOf(data, isString)) {
     return new Map(
       Object.entries(data).map(
-        ([k, v]) => [k, new URL(v, samplesIndexUrl).href] satisfies [string, string],
+        ([k, v]) =>
+          [k, new URL(v, samplesIndexUrl).href] satisfies [string, string],
       ),
     );
   } else {
