@@ -20,7 +20,9 @@ export function tryFn<V>(fn: () => V): Result<V, unknown> {
     return Err(e);
   }
 }
-export async function tryAsyncFn<V>(fn: () => V): Promise<Result<Awaited<V>, unknown>> {
+export async function tryAsyncFn<V>(
+  fn: () => V,
+): Promise<Result<Awaited<V>, unknown>> {
   try {
     return Ok(await fn());
   } catch (e) {
