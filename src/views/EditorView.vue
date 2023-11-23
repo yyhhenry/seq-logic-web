@@ -641,7 +641,7 @@ const onShowUnits = () => {
   <PageLayout :style="{ height: '100%' }">
     <template #header>
       <ElSpace>
-        <ElButton :type="'danger'" @click="onSave()">保存</ElButton>
+        <ElButton :type="'danger'" @click="onSave()">Force Save</ElButton>
         <HeaderText>{{ diagram.modified ? '⛷️Modifying' : '😊Saved' }}</HeaderText>
       </ElSpace>
     </template>
