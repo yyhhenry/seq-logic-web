@@ -1,10 +1,10 @@
 import { isString } from 'lodash';
 import { isDiagramStorage } from './seq-logic';
-import { isObjectOf } from './types';
+import { isRecordOf } from './type-guards';
 export const unitsIndexUrl = new URL('units/index.json', window.location.href);
 export async function getUnitsMap() {
   const data = await (await fetch(unitsIndexUrl)).json();
-  if (isObjectOf(data, isString)) {
+  if (isRecordOf(data, isString)) {
     return new Map(Object.entries(data));
   } else {
     throw new Error('Invalid units index');

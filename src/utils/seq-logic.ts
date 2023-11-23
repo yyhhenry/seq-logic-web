@@ -1,6 +1,10 @@
 import { cloneDeep, random } from 'lodash';
 import { v4 as uuid } from 'uuid';
-import { type MaybeObject, isObjectMaybe, isObjectOf } from './types';
+import {
+  type PartialUnknown,
+  isPartialUnknown,
+  isRecordOf,
+} from './type-guards';
 import { ElMessage } from 'element-plus';
 import animeFrame from './anime-frame';
 // import { fs } from '@tauri-apps/api';
@@ -10,21 +14,32 @@ interface Coordinate {
 }
 export const isCoordinate = <T extends Coordinate>(
   u: unknown,
-): u is Coordinate & MaybeObject<T> => {
-  return isObjectMaybe<Coordinate>(u) && typeof u.x === 'number' && typeof u.y === 'number';
+): u is Coordinate & PartialUnknown<T> => {
+  return (
+    isPartialUnknown<Coordinate>(u) &&
+    typeof u.x === 'number' &&
+    typeof u.y === 'number'
+  );
 };
 export interface Clock {
   offset: number;
   duration: number;
 }
 export const isClock = (u: unknown): u is Clock => {
-  return isObjectMaybe<Clock>(u) && typeof u.offset === 'number' && typeof u.duration === 'number';
+  return (
+    isPartialUnknown<Clock>(u) &&
+    typeof u.offset === 'number' &&
+    typeof u.duration === 'number'
+  );
 };
 export interface Node extends Coordinate {
   powered: boolean | Clock;
 }
 export const isNode = (u: unknown): u is Node => {
-  return isCoordinate<Node>(u) && (typeof u.powered === 'boolean' || isClock(u.powered));
+  return (
+    isCoordinate<Node>(u) &&
+    (typeof u.powered === 'boolean' || isClock(u.powered))
+  );
 };
 export interface Wire {
   start: string;
@@ -33,7 +48,7 @@ export interface Wire {
 }
 export const isWire = (u: unknown): u is Wire => {
   return (
-    isObjectMaybe<Wire>(u) &&
+    isPartialUnknown<Wire>(u) &&
     typeof u.start === 'string' &&
     typeof u.end === 'string' &&
     typeof u.not === 'boolean'
@@ -44,13 +59,19 @@ export interface Text extends Coordinate {
   scale: number;
 }
 export const isText = (u: unknown): u is Text => {
-  return isCoordinate<Text>(u) && typeof u.text === 'string' && typeof u.scale === 'number';
+  return (
+    isCoordinate<Text>(u) &&
+    typeof u.text === 'string' &&
+    typeof u.scale === 'number'
+  );
 };
 export interface Viewport extends Coordinate {
   scale: number;
 }
 export const isViewport = (u: unknown): u is Viewport => {
-  return isCoordinate<Viewport>(u) && typeof u.scale === 'number' && u.scale > 0;
+  return (
+    isCoordinate<Viewport>(u) && typeof u.scale === 'number' && u.scale > 0
+  );
 };
 export interface DiagramStorage {
   nodes: Record<string, Node>;
@@ -58,12 +79,12 @@ export interface DiagramStorage {
   texts: Record<string, Text>;
   viewport: Viewport;
 }
-export const isDiagramStorage = (u: any): u is DiagramStorage => {
+export const isDiagramStorage = (u: unknown): u is DiagramStorage => {
   return (
-    isObjectMaybe<DiagramStorage>(u) &&
-    isObjectOf(u.nodes, isNode) &&
-    isObjectOf(u.wires, isWire) &&
-    isObjectOf(u.texts, isText) &&
+    isPartialUnknown<DiagramStorage>(u) &&
+    isRecordOf(u.nodes, isNode) &&
+    isRecordOf(u.wires, isWire) &&
+    isRecordOf(u.texts, isText) &&
     isViewport(u.viewport)
   );
 };
@@ -218,11 +239,14 @@ export const notNullAssertion = <T>(value: T | undefined | null): T => {
 export const required = notNullAssertion;
 export const remarkId = (storage: DiagramStorage) => {
   const nodeIdMapping = new Map(
-    [...Object.keys(storage.nodes)].map((id) => [id, uuid()] satisfies [string, string]),
+    [...Object.keys(storage.nodes)].map(
+      (id) => [id, uuid()] satisfies [string, string],
+    ),
   );
   const nodes = Object.fromEntries(
     Object.entries(storage.nodes).map(
-      ([id, node]) => [required(nodeIdMapping.get(id)), node] satisfies [string, Node],
+      ([id, node]) =>
+        [required(nodeIdMapping.get(id)), node] satisfies [string, Node],
     ),
   );
   const wires = Object.fromEntries(
@@ -239,7 +263,9 @@ export const remarkId = (storage: DiagramStorage) => {
     ),
   );
   const texts = Object.fromEntries(
-    Object.values(storage.texts).map((text) => [uuid(), text] satisfies [string, Text]),
+    Object.values(storage.texts).map(
+      (text) => [uuid(), text] satisfies [string, Text],
+    ),
   );
   return cloneDeep({
     nodes,
@@ -252,8 +278,11 @@ export const maxClockDuration = 10000;
 export const powerOnDuration = 1e12;
 export const validPoweredType = ['general', 'clock', 'power-on'] as const;
 export type ValidPoweredType = (typeof validPoweredType)[number];
-export const isValidPoweredType = (tab: string | number): tab is ValidPoweredType =>
-  typeof tab === 'string' && (validPoweredType as readonly unknown[]).includes(tab);
+export const isValidPoweredType = (
+  tab: string | number,
+): tab is ValidPoweredType =>
+  typeof tab === 'string' &&
+  (validPoweredType as readonly unknown[]).includes(tab);
 export const getPoweredType = (powered: boolean | Clock): ValidPoweredType => {
   if (typeof powered === 'boolean') {
     return 'general';
@@ -286,7 +315,9 @@ export function isWiresValid(storage: DiagramStorage) {
   if (wires.some((wire) => !nodeIds.includes(wire.end))) {
     return false;
   }
-  const wireSet = new Set(wires.map((wire) => JSON.stringify([wire.start, wire.end])));
+  const wireSet = new Set(
+    wires.map((wire) => JSON.stringify([wire.start, wire.end])),
+  );
   if (wireSet.size !== wires.length) {
     return false;
   }
@@ -334,7 +365,9 @@ export class Diagram {
     this.status = new Map(
       [...this.nodes.entries()].map(([id, { powered }]) => [
         id,
-        getPowered(powered) ? { active: true, powered: true } : { active: false, powered: false },
+        getPowered(powered)
+          ? { active: true, powered: true }
+          : { active: false, powered: false },
       ]),
     );
     this.toggle = new Map();
@@ -367,7 +400,9 @@ export class Diagram {
     this.status = new Map(
       [...this.nodes.entries()].map(([id, { powered }]) => [
         id,
-        getPowered(powered) ? { active: true, powered: true } : { active: false, powered: false },
+        getPowered(powered)
+          ? { active: true, powered: true }
+          : { active: false, powered: false },
       ]),
     );
     this.activateAll();
@@ -413,13 +448,19 @@ export class Diagram {
         continue;
       }
       this.groupRoot.set(start, end);
-      required(this.status.get(end)).powered ||= required(this.status.get(start)).powered;
+      required(this.status.get(end)).powered ||= required(
+        this.status.get(start),
+      ).powered;
     }
     for (const id of this.nodes.keys()) {
       this.getGroupRoot(id);
     }
-    this.updatePrecursors = new Map([...this.nodes.entries()].map(([id]) => [id, new Set()]));
-    this.updateSuccessors = new Map([...this.nodes.entries()].map(([id]) => [id, new Set()]));
+    this.updatePrecursors = new Map(
+      [...this.nodes.entries()].map(([id]) => [id, new Set()]),
+    );
+    this.updateSuccessors = new Map(
+      [...this.nodes.entries()].map(([id]) => [id, new Set()]),
+    );
     for (const wire of this.wires.values()) {
       if (!wire.not) {
         continue;
@@ -481,9 +522,15 @@ export class Diagram {
         })
         .map(([id]) => id),
     );
-    const nodes = Object.fromEntries([...this.nodes.entries()].filter(([id]) => nodeIds.has(id)));
-    const wires = Object.fromEntries([...this.wires.entries()].filter(([id]) => wireIds.has(id)));
-    const texts = Object.fromEntries([...this.texts.entries()].filter(([id]) => textIds.has(id)));
+    const nodes = Object.fromEntries(
+      [...this.nodes.entries()].filter(([id]) => nodeIds.has(id)),
+    );
+    const wires = Object.fromEntries(
+      [...this.wires.entries()].filter(([id]) => wireIds.has(id)),
+    );
+    const texts = Object.fromEntries(
+      [...this.texts.entries()].filter(([id]) => textIds.has(id)),
+    );
     return cloneDeep({
       nodes,
       wires,
@@ -530,7 +577,9 @@ export class Diagram {
   }
   hasUncommitted() {
     return (
-      this.nodes.hasUncommitted() || this.wires.hasUncommitted() || this.texts.hasUncommitted()
+      this.nodes.hasUncommitted() ||
+      this.wires.hasUncommitted() ||
+      this.texts.hasUncommitted()
     );
   }
   /**
