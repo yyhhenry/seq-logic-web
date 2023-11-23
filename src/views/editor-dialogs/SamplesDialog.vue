@@ -11,7 +11,7 @@ defineEmits<{
 const text = ref('');
 const allSamples = asyncComputed(async () => [...(await getSamplesMap()).entries()], []);
 const samples = computed(() =>
-  text.value == ''
+  text.value === ''
     ? allSamples.value
     : allSamples.value.filter(([name]) => name.toLowerCase().includes(text.value.toLowerCase())),
 );
