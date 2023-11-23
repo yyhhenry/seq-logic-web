@@ -9,7 +9,9 @@ const props = defineProps<{
   selected: boolean;
 }>();
 const startPart = computed(() => props.startStatus.active);
-const endPart = computed(() => (props.wire.not ? !startPart.value : startPart.value));
+const endPart = computed(() =>
+  props.wire.not ? !startPart.value : startPart.value,
+);
 const mid = computed(() => ({
   x: (props.start.x + props.end.x) / 2,
   y: (props.start.y + props.end.y) / 2,
@@ -30,7 +32,8 @@ const positions = computed(() =>
   })),
 );
 const gate = computed(() => {
-  const toStr = (i: number) => `${positions.value[i].x} ${positions.value[i].y}`;
+  const toStr = (i: number) =>
+    `${positions.value[i].x} ${positions.value[i].y}`;
   return `M ${toStr(0)} L ${toStr(1)} L ${toStr(2)} Z`;
 });
 </script>
@@ -42,7 +45,9 @@ const gate = computed(() => {
         :y1="start.y"
         :x2="mid.x"
         :y2="mid.y"
-        :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'"
+        :stroke="
+          startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        "
         :stroke-width="width"
       ></line>
       <line
@@ -50,12 +55,16 @@ const gate = computed(() => {
         :y1="mid.y"
         :x2="end.x"
         :y2="end.y"
-        :stroke="endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'"
+        :stroke="
+          endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        "
         :stroke-width="width"
       ></line>
       <path
         :d="gate"
-        :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'"
+        :stroke="
+          startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        "
         :stroke-width="width / 2"
         :fill="'var(--color-background)'"
       ></path>
@@ -63,7 +72,9 @@ const gate = computed(() => {
         :cx="positions[0].x"
         :cy="positions[0].y"
         :r="width / 2"
-        :stroke="endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'"
+        :stroke="
+          endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        "
         :stroke-width="width / 2"
         :fill="'var(--color-background)'"
       ></circle>
@@ -74,7 +85,9 @@ const gate = computed(() => {
       :y1="start.y"
       :x2="end.x"
       :y2="end.y"
-      :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'"
+      :stroke="
+        startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+      "
       :stroke-width="width"
     ></line>
     <line

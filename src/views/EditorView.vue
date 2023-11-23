@@ -16,7 +16,12 @@ import { HeaderText, LRMenu, PageLayout } from 'luoluo-vue-components';
 import { Diagram, isDiagramStorage } from '@/utils/seq-logic';
 import { computed, ref, watchEffect } from 'vue';
 import { getPopularUnits, getUnit } from '@/utils/seq-logic-units';
-import { useDebounceFn, useEventListener, useIntervalFn, useMouseInElement } from '@vueuse/core';
+import {
+  useDebounceFn,
+  useEventListener,
+  useIntervalFn,
+  useMouseInElement,
+} from '@vueuse/core';
 import animeFrame from '@/utils/anime-frame';
 import EditNode from './editor-dialogs/EditNode.vue';
 import EditWire from './editor-dialogs/EditWire.vue';
@@ -115,7 +120,9 @@ const clearSelectedItems = () => {
 };
 const selectedItemCount = computed(() => {
   return (
-    selectedItems.value.nodes.size + selectedItems.value.wires.size + selectedItems.value.texts.size
+    selectedItems.value.nodes.size +
+    selectedItems.value.wires.size +
+    selectedItems.value.texts.size
   );
 });
 const hasSelectedItems = computed(() => {
@@ -139,7 +146,10 @@ const onRedo = () => {
   props.diagram.redo();
 };
 const onCopy = async () => {
-  const storage = props.diagram.extract(selectedItems.value.nodes, selectedItems.value.texts);
+  const storage = props.diagram.extract(
+    selectedItems.value.nodes,
+    selectedItems.value.texts,
+  );
   await navigator.clipboard.writeText(JSON.stringify(storage));
 };
 const onAddUnit = async (name: string) => {
@@ -157,7 +167,9 @@ const onPaste = async () => {
     }
   });
   if (!result.ok) {
-    ElMessage.error(result.e instanceof Error ? result.e.message : 'Unknown error');
+    ElMessage.error(
+      result.e instanceof Error ? result.e.message : 'Unknown error',
+    );
   }
 };
 const onResetTime = () => {
@@ -225,7 +237,10 @@ const getNodeAtMouse = () => {
   // should not be the node being added
   let result = undefined as string | undefined;
   for (const [id, node] of props.diagram.nodes.entries()) {
-    const [dx, dy] = [node.x - mouseInView.value.x, node.y - mouseInView.value.y];
+    const [dx, dy] = [
+      node.x - mouseInView.value.x,
+      node.y - mouseInView.value.y,
+    ];
     if (id === addingNode.value) {
       continue;
     }
@@ -246,7 +261,11 @@ const addWireProc = (commit = false) => {
     y: mouseInView.value.y,
     powered: false,
   };
-  if (wireEnd.value === undefined || end === undefined || end !== wireEnd.value) {
+  if (
+    wireEnd.value === undefined ||
+    end === undefined ||
+    end !== wireEnd.value
+  ) {
     props.diagram.clearUncommitted();
     addingNode.value = undefined;
     wireEnd.value = undefined;
@@ -364,7 +383,10 @@ const onKeyUp = (e: KeyboardEvent) => {
       onSelectAll();
     }
   } else if (!e.shiftKey) {
-    if (editorStatus.value === 'idle' || editorStatus.value.startsWith('add-')) {
+    if (
+      editorStatus.value === 'idle' ||
+      editorStatus.value.startsWith('add-')
+    ) {
       if (e.key === 'a') {
         onAddNode();
       } else if (e.key === 'w') {
@@ -420,7 +442,11 @@ interface MousePath {
 }
 const mousePath = ref<MousePath>();
 const blockContentMenu = ref(false);
-const onMouseDown = (e: MouseEvent, itemType: ItemType | 'blank', id: string) => {
+const onMouseDown = (
+  e: MouseEvent,
+  itemType: ItemType | 'blank',
+  id: string,
+) => {
   e.stopPropagation();
   if (editorStatus.value === 'idle') {
     mousePath.value = {
@@ -465,7 +491,10 @@ const onMouseUp = (e: MouseEvent) => {
   e.preventDefault();
   e.stopPropagation();
   if (mousePath.value !== undefined) {
-    if (mousePath.value.mode === 'box-select' || mousePath.value.mode === 'box-toggle-select') {
+    if (
+      mousePath.value.mode === 'box-select' ||
+      mousePath.value.mode === 'box-toggle-select'
+    ) {
       const [left, top] = [
         Math.min(mousePath.value.x, mouseInView.value.x),
         Math.min(mousePath.value.y, mouseInView.value.y),
@@ -481,7 +510,10 @@ const onMouseUp = (e: MouseEvent) => {
       }
       for (const [id, node] of props.diagram.nodes.entries()) {
         if (inRange(node.x, node.y)) {
-          if (mousePath.value.mode === 'box-toggle-select' && selectedItems.value.nodes.has(id)) {
+          if (
+            mousePath.value.mode === 'box-toggle-select' &&
+            selectedItems.value.nodes.has(id)
+          ) {
             selectedItems.value.nodes.delete(id);
           } else {
             selectedItems.value.nodes.add(id);
@@ -490,7 +522,10 @@ const onMouseUp = (e: MouseEvent) => {
       }
       for (const [id, text] of props.diagram.texts.entries()) {
         if (inRange(text.x, text.y)) {
-          if (mousePath.value.mode === 'box-toggle-select' && selectedItems.value.texts.has(id)) {
+          if (
+            mousePath.value.mode === 'box-toggle-select' &&
+            selectedItems.value.texts.has(id)
+          ) {
             selectedItems.value.texts.delete(id);
           } else {
             selectedItems.value.texts.add(id);
@@ -642,7 +677,9 @@ const onShowUnits = () => {
     <template #header>
       <ElSpace>
         <ElButton :type="'danger'" @click="onSave()">Force Save</ElButton>
-        <HeaderText>{{ diagram.modified ? '⛷️Modifying' : '😊Saved' }}</HeaderText>
+        <HeaderText>{{
+          diagram.modified ? '⛷️Modifying' : '😊Saved'
+        }}</HeaderText>
       </ElSpace>
     </template>
     <template #header-extra>
@@ -661,7 +698,9 @@ const onShowUnits = () => {
                 {{ name }}
               </ElDropdownItem>
               <ElDivider></ElDivider>
-              <ElDropdownItem @click="onShowUnits()"> Show More </ElDropdownItem>
+              <ElDropdownItem @click="onShowUnits()">
+                Show More
+              </ElDropdownItem>
             </div>
           </template>
         </ElDropdown>
@@ -672,17 +711,29 @@ const onShowUnits = () => {
           </ElLink>
           <template #dropdown>
             <div class="header-text">
-              <ElDropdownItem @click="onAddNode()"> Add Node (A) </ElDropdownItem>
+              <ElDropdownItem @click="onAddNode()">
+                Add Node (A)
+              </ElDropdownItem>
               <ElDropdownItem
-                :style="selectedItems.nodes.size ? {} : { color: 'var(--el-color-info)' }"
+                :style="
+                  selectedItems.nodes.size
+                    ? {}
+                    : { color: 'var(--el-color-info)' }
+                "
                 @click="onAddWire()"
               >
                 Add Wire (W)
               </ElDropdownItem>
-              <ElDropdownItem @click="onAddText()"> Add Text (T) </ElDropdownItem>
+              <ElDropdownItem @click="onAddText()">
+                Add Text (T)
+              </ElDropdownItem>
               <ElDivider></ElDivider>
               <ElDropdownItem
-                :style="editorStatus !== 'idle' ? {} : { color: 'var(--el-color-info)' }"
+                :style="
+                  editorStatus !== 'idle'
+                    ? {}
+                    : { color: 'var(--el-color-info)' }
+                "
                 @click="onEscape()"
               >
                 Stop (Esc)
@@ -710,16 +761,26 @@ const onShowUnits = () => {
               <ElDropdownItem @click="onUndo()"> Undo (Ctrl+Z) </ElDropdownItem>
               <ElDropdownItem @click="onRedo()"> Redo (Ctrl+Y) </ElDropdownItem>
               <ElDropdownItem
-                :style="hasSelectedItems ? {} : { color: 'var(--el-color-info)' }"
+                :style="
+                  hasSelectedItems ? {} : { color: 'var(--el-color-info)' }
+                "
                 @click="onCopy()"
               >
                 Copy (Ctrl+C)
               </ElDropdownItem>
-              <ElDropdownItem @click="onPaste()"> Paste (Ctrl+V) </ElDropdownItem>
+              <ElDropdownItem @click="onPaste()">
+                Paste (Ctrl+V)
+              </ElDropdownItem>
               <ElDivider></ElDivider>
-              <ElDropdownItem @click="onResetViewport()"> Reset Viewport </ElDropdownItem>
-              <ElDropdownItem @click="onResetTime()"> Reset Time </ElDropdownItem>
-              <ElDropdownItem @click="onSave()"> Force Save (Ctrl+S) </ElDropdownItem>
+              <ElDropdownItem @click="onResetViewport()">
+                Reset Viewport
+              </ElDropdownItem>
+              <ElDropdownItem @click="onResetTime()">
+                Reset Time
+              </ElDropdownItem>
+              <ElDropdownItem @click="onSave()">
+                Force Save (Ctrl+S)
+              </ElDropdownItem>
             </div>
           </template>
         </ElDropdown>
@@ -806,7 +867,12 @@ const onShowUnits = () => {
             >
               <TextView :text="text" :selected="selectedItems.texts.has(id)" />
             </g>
-            <g v-if="mousePath?.mode == 'box-select' || mousePath?.mode == 'box-toggle-select'">
+            <g
+              v-if="
+                mousePath?.mode == 'box-select' ||
+                mousePath?.mode == 'box-toggle-select'
+              "
+            >
               <rect
                 :x="Math.min(mousePath.x, mouseInView.x)"
                 :y="Math.min(mousePath.y, mouseInView.y)"
@@ -826,7 +892,11 @@ const onShowUnits = () => {
           <div class="margin-in-line" :title="'Status'">
             {{ editorStatus }}
           </div>
-          <div class="margin-in-line" :title="'Viewport'" v-if="diagram !== undefined">
+          <div
+            class="margin-in-line"
+            :title="'Viewport'"
+            v-if="diagram !== undefined"
+          >
             {{
               `${diagram.viewport.x.toFixed(2)}:${diagram.viewport.y.toFixed(
                 2,
@@ -907,8 +977,8 @@ const onShowUnits = () => {
 .header-text {
   user-select: none;
   font-size: larger;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
-    Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .editor-footer {
   border-top: solid 2px var(--el-border-color);

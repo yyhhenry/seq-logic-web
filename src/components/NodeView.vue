@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { type Node, type Status, getPowered, getPoweredType } from '@/utils/seq-logic';
+import {
+  type Node,
+  type Status,
+  getPowered,
+  getPoweredType,
+} from '@/utils/seq-logic';
 import { computed } from 'vue';
 const props = defineProps<{
   node: Node;
@@ -14,7 +19,12 @@ const poweredType = computed(() => getPoweredType(props.node.powered));
 </script>
 <template>
   <g>
-    <circle :cx="node.x" :cy="node.y" :r="radius" :fill="'var(--el-text-color-primary)'" />
+    <circle
+      :cx="node.x"
+      :cy="node.y"
+      :r="radius"
+      :fill="'var(--el-text-color-primary)'"
+    />
     <circle
       v-if="powered"
       :cx="node.x"
@@ -29,7 +39,13 @@ const poweredType = computed(() => getPoweredType(props.node.powered));
       :r="probeRadius"
       :fill="'var(--el-color-primary)'"
     />
-    <circle v-else :cx="node.x" :cy="node.y" :r="probeRadius" :fill="'var(--el-color-info)'" />
+    <circle
+      v-else
+      :cx="node.x"
+      :cy="node.y"
+      :r="probeRadius"
+      :fill="'var(--el-color-info)'"
+    />
     <rect
       v-if="selected"
       :x="node.x - radius - padding"

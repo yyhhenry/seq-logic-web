@@ -21,11 +21,15 @@ import SamplesDialog from './editor-dialogs/SamplesDialog.vue';
 import { getSample } from '@/utils/seq-logic-samples';
 const fileAccess = useFileSystemAccess({
   dataType: 'Text',
-  types: [{ description: 'SeqLogic Diagram', accept: { 'text/json': ['.seq.json'] } }],
+  types: [
+    { description: 'SeqLogic Diagram', accept: { 'text/json': ['.seq.json'] } },
+  ],
   excludeAcceptAllOption: true,
 });
 const pageTitle = computed(() =>
-  fileAccess.file.value ? `${fileAccess.file.value.name} - ${websiteName}` : websiteName,
+  fileAccess.file.value
+    ? `${fileAccess.file.value.name} - ${websiteName}`
+    : websiteName,
 );
 useTitle(pageTitle);
 const content = fileAccess.data;
@@ -78,9 +82,15 @@ const onShowSamples = () => {
   <PageLayout>
     <template #header>
       <ElSpace>
-        <ElImage src="./favicon.png" fit="scale-down" :style="{ height: '3em' }" />
+        <ElImage
+          src="./favicon.png"
+          fit="scale-down"
+          :style="{ height: '3em' }"
+        />
         <HeaderText>{{ websiteName }}</HeaderText>
-        <span v-if="fileAccess.file.value">{{ fileAccess.file.value.name }}</span>
+        <span v-if="fileAccess.file.value">{{
+          fileAccess.file.value.name
+        }}</span>
       </ElSpace>
     </template>
     <template #header-extra>

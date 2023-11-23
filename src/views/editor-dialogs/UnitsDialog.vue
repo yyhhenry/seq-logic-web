@@ -9,11 +9,16 @@ defineEmits<{
   (event: 'add', name: string): void;
 }>();
 const text = ref('');
-const allUnits = asyncComputed(async () => [...(await getUnitsMap()).keys()], []);
+const allUnits = asyncComputed(
+  async () => [...(await getUnitsMap()).keys()],
+  [],
+);
 const units = computed(() =>
   text.value === ''
     ? allUnits.value
-    : allUnits.value.filter((unit) => unit.toLowerCase().includes(text.value.toLowerCase())),
+    : allUnits.value.filter((unit) =>
+        unit.toLowerCase().includes(text.value.toLowerCase()),
+      ),
 );
 </script>
 <template>

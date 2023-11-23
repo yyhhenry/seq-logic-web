@@ -9,11 +9,16 @@ defineEmits<{
   (event: 'open', url: string): void;
 }>();
 const text = ref('');
-const allSamples = asyncComputed(async () => [...(await getSamplesMap()).entries()], []);
+const allSamples = asyncComputed(
+  async () => [...(await getSamplesMap()).entries()],
+  [],
+);
 const samples = computed(() =>
   text.value === ''
     ? allSamples.value
-    : allSamples.value.filter(([name]) => name.toLowerCase().includes(text.value.toLowerCase())),
+    : allSamples.value.filter(([name]) =>
+        name.toLowerCase().includes(text.value.toLowerCase()),
+      ),
 );
 </script>
 <template>

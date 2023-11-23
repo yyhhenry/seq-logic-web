@@ -25,7 +25,9 @@ const onReverse = () => {
         :inactive-text="'None'"
         @change="commit()"
       ></ElSwitch>
-      <ElButton v-if="wire.not" @click="onReverse()" class="header-text">Reverse</ElButton>
+      <ElButton v-if="wire.not" @click="onReverse()" class="header-text"
+        >Reverse</ElButton
+      >
     </ElRow>
   </div>
 </template>
@@ -34,7 +36,7 @@ const onReverse = () => {
 .header-text {
   user-select: none;
   font-size: larger;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
-    Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 </style>

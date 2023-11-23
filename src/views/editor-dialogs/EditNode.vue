@@ -7,7 +7,13 @@ import {
   maxClockDuration,
   powerOnDuration,
 } from '@/utils/seq-logic';
-import { ElInputNumber, ElRow, ElSwitch, ElTabPane, ElTabs } from 'element-plus';
+import {
+  ElInputNumber,
+  ElRow,
+  ElSwitch,
+  ElTabPane,
+  ElTabs,
+} from 'element-plus';
 import { computed, ref } from 'vue';
 const props = defineProps<{
   diagram: Diagram;
@@ -111,8 +117,8 @@ const tab = computed({
 .header-text {
   user-select: none;
   font-size: larger;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
-    Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .margin-right {
   margin-right: 10px;
