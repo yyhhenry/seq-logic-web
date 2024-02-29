@@ -417,7 +417,7 @@ export class Diagram {
       this.wirePairSet.add(JSON.stringify([wire.end, wire.start]));
     }
     for (const id of this.nodes.keys()) {
-      if (this.status.get(id) === null) {
+      if (this.status.get(id) === undefined) {
         this.status.set(id, { active: false, powered: false });
       }
     }
