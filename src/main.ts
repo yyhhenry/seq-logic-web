@@ -1,4 +1,4 @@
-import './assets/main.css';
+import '@yyhhenry/element-extra/dist/style.css';
 
 import { createApp } from 'vue';
 import App from './App.vue';
