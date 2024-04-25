@@ -15,29 +15,29 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@vueuse/core": "^10.9.0",
-    "element-plus": "^2.5.6",
+    "@yyhhenry/element-extra": "^0.3.0",
+    "element-plus": "^2.7.1",
     "lodash": "^4.17.21",
-    "luoluo-vue-components": "^0.0.4",
-    "sass": "^1.71.1",
+    "sass": "^1.75.0",
     "uuid": "^9.0.1",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue": "^3.4.25",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^18.2.2",
-    "@types/lodash": "^4.14.202",
-    "@types/node": "^20.11.22",
+    "@tsconfig/node18": "^18.2.4",
+    "@types/lodash": "^4.17.0",
+    "@types/node": "^20.12.7",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/tsconfig": "^0.4.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.22.0",
+    "eslint-plugin-vue": "^9.25.0",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
     "typescript": "~5.2.2",
-    "vite": "^5.1.4",
+    "vite": "^5.2.10",
     "vue-tsc": "^1.8.27"
   }
 }

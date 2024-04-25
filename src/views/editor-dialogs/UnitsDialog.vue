@@ -3,7 +3,7 @@ import { getUnitsMap } from '@/utils/seq-logic-units';
 import { asyncComputed } from '@vueuse/core';
 import { ElInput, ElSpace, ElButton, ElDivider } from 'element-plus';
 import { computed, ref } from 'vue';
-import { CenterLayout, HeaderText } from 'luoluo-vue-components';
+import { CenterLayout, HeaderText } from '@yyhhenry/element-extra';
 import { Search } from '@element-plus/icons-vue';
 defineEmits<{
   (event: 'add', name: string): void;

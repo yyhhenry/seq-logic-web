@@ -5,7 +5,7 @@ import {
   MiddleLayout,
   PageLayout,
   SwitchDark,
-} from 'luoluo-vue-components';
+} from '@yyhhenry/element-extra';
 import { useFileSystemAccess, useTitle } from '@vueuse/core';
 import websiteName from '@/utils/website-name';
 import { ElButton, ElDialog, ElImage, ElSpace } from 'element-plus';
