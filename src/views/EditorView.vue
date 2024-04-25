@@ -12,7 +12,7 @@ import {
   ElSpace,
   ElButton,
 } from 'element-plus';
-import { HeaderText, LRMenu, PageLayout } from 'luoluo-vue-components';
+import { HeaderText, LRMenu, PageLayout } from '@yyhhenry/element-extra';
 import { Diagram, isDiagramStorage } from '@/utils/seq-logic';
 import { computed, ref, watchEffect } from 'vue';
 import { getPopularUnits, getUnit } from '@/utils/seq-logic-units';

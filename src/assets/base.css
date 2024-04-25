@@ -1,5 +1,6 @@
 @import '/node_modules/element-plus/theme-chalk/index.css';
 @import '/node_modules/element-plus/theme-chalk/dark/css-vars.css';
+@import '/node_modules/@yyhhenry/element-extra/dist/style.css';
 
 *,
 *::before,
