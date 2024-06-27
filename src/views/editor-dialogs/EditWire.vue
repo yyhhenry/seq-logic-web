@@ -19,15 +19,8 @@ const onReverse = () => {
 <template>
   <div v-if="wire">
     <ElRow :justify="'space-between'" :align="'middle'">
-      <ElSwitch
-        v-model="wire.not"
-        :active-text="'Not Gate'"
-        :inactive-text="'None'"
-        @change="commit()"
-      ></ElSwitch>
-      <ElButton v-if="wire.not" @click="onReverse()" class="header-text"
-        >Reverse</ElButton
-      >
+      <ElSwitch v-model="wire.not" :active-text="'Not Gate'" :inactive-text="'None'" @change="commit()"></ElSwitch>
+      <ElButton v-if="wire.not" @click="onReverse()" class="header-text">Reverse</ElButton>
     </ElRow>
   </div>
 </template>

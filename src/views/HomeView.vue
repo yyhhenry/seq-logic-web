@@ -82,11 +82,7 @@ const onShowSamples = () => {
   <PageLayout>
     <template #header>
       <ElSpace>
-        <ElImage
-          src="./favicon.png"
-          fit="scale-down"
-          :style="{ height: '3em' }"
-        />
+        <ElImage src="./favicon.png" fit="scale-down" :style="{ height: '3em' }" />
         <HeaderText>{{ websiteName }}</HeaderText>
         <span v-if="fileAccess.file.value">{{
           fileAccess.file.value.name

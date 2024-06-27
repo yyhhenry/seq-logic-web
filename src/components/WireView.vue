@@ -40,66 +40,19 @@ const gate = computed(() => {
 <template>
   <g>
     <g v-if="wire.not">
-      <line
-        :x1="start.x"
-        :y1="start.y"
-        :x2="mid.x"
-        :y2="mid.y"
-        :stroke="
-          startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
-        "
-        :stroke-width="width"
-      ></line>
-      <line
-        :x1="mid.x"
-        :y1="mid.y"
-        :x2="end.x"
-        :y2="end.y"
-        :stroke="
-          endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
-        "
-        :stroke-width="width"
-      ></line>
-      <path
-        :d="gate"
-        :stroke="
-          startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
-        "
-        :stroke-width="width / 2"
-        :fill="'var(--color-background)'"
-      ></path>
-      <circle
-        :cx="positions[0].x"
-        :cy="positions[0].y"
-        :r="width / 2"
-        :stroke="
-          endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
-        "
-        :stroke-width="width / 2"
-        :fill="'var(--color-background)'"
-      ></circle>
+      <line :x1="start.x" :y1="start.y" :x2="mid.x" :y2="mid.y" :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        " :stroke-width="width"></line>
+      <line :x1="mid.x" :y1="mid.y" :x2="end.x" :y2="end.y" :stroke="endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        " :stroke-width="width"></line>
+      <path :d="gate" :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        " :stroke-width="width / 2" :fill="'var(--color-background)'"></path>
+      <circle :cx="positions[0].x" :cy="positions[0].y" :r="width / 2" :stroke="endPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+        " :stroke-width="width / 2" :fill="'var(--color-background)'"></circle>
     </g>
-    <line
-      v-else
-      :x1="start.x"
-      :y1="start.y"
-      :x2="end.x"
-      :y2="end.y"
-      :stroke="
-        startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
-      "
-      :stroke-width="width"
-    ></line>
-    <line
-      v-if="selected"
-      :x1="start.x"
-      :y1="start.y"
-      :x2="end.x"
-      :y2="end.y"
-      :stroke="'var(--el-color-primary)'"
-      :stroke-width="width * 3"
-      :opacity="0.7"
-    >
+    <line v-else :x1="start.x" :y1="start.y" :x2="end.x" :y2="end.y" :stroke="startPart ? 'var(--el-color-primary)' : 'var(--el-text-color-primary)'
+      " :stroke-width="width"></line>
+    <line v-if="selected" :x1="start.x" :y1="start.y" :x2="end.x" :y2="end.y" :stroke="'var(--el-color-primary)'"
+      :stroke-width="width * 3" :opacity="0.7">
     </line>
   </g>
 </template>

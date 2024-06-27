@@ -54,58 +54,32 @@ const tab = computed({
     <ElTabs v-model="tab">
       <ElTabPane label="General" :name="'general'">
         <ElRow :justify="'center'" :align="'middle'">
-          <ElSwitch
-            v-if="typeof node.powered === 'boolean'"
-            v-model="node.powered"
-            :active-text="'Powered'"
-            :inactive-text="'Off'"
-            @change="commit()"
-          ></ElSwitch>
+          <ElSwitch v-if="typeof node.powered === 'boolean'" v-model="node.powered" :active-text="'Powered'"
+            :inactive-text="'Off'" @change="commit()"></ElSwitch>
         </ElRow>
       </ElTabPane>
       <ElTabPane label="Clock" :name="'clock'">
         <div v-if="typeof node.powered === 'object' && tab === 'clock'">
           <ElRow :justify="'space-between'" :align="'middle'">
             <span class="header-text margin-right">Duration (ms)</span>
-            <ElInputNumber
-              v-model="node.powered.duration"
-              :controls-position="'right'"
-              :min="200"
-              :max="maxClockDuration"
-              :step="100"
-              @change="commit()"
-            >
+            <ElInputNumber v-model="node.powered.duration" :controls-position="'right'" :min="200"
+              :max="maxClockDuration" :step="100" @change="commit()">
             </ElInputNumber>
           </ElRow>
           <ElRow :justify="'space-between'" :align="'middle'">
             <span class="header-text margin-right">Offset (ms)</span>
-            <ElInputNumber
-              v-model="node.powered.offset"
-              :controls-position="'right'"
-              :min="0"
-              :max="2 * node.powered.duration"
-              :step="100"
-              @change="commit()"
-            >
+            <ElInputNumber v-model="node.powered.offset" :controls-position="'right'" :min="0"
+              :max="2 * node.powered.duration" :step="100" @change="commit()">
             </ElInputNumber>
           </ElRow>
         </div>
       </ElTabPane>
       <ElTabPane label="Power-on Reset" :name="'power-on'">
-        <ElRow
-          :justify="'space-between'"
-          :align="'middle'"
-          v-if="typeof node.powered === 'object' && tab === 'power-on'"
-        >
+        <ElRow :justify="'space-between'" :align="'middle'"
+          v-if="typeof node.powered === 'object' && tab === 'power-on'">
           <span class="header-text margin-right">Duration (ms)</span>
-          <ElInputNumber
-            v-model="node.powered.offset"
-            :controls-position="'right'"
-            :min="200"
-            :max="maxClockDuration"
-            :step="100"
-            @change="commit()"
-          >
+          <ElInputNumber v-model="node.powered.offset" :controls-position="'right'" :min="200" :max="maxClockDuration"
+            :step="100" @change="commit()">
           </ElInputNumber>
         </ElRow>
       </ElTabPane>
@@ -120,6 +94,7 @@ const tab = computed({
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 .margin-right {
   margin-right: 10px;
 }
