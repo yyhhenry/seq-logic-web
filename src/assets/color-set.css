@@ -1,0 +1,15 @@
+html {
+    --ex-bg: #fff;
+    --ex-active-bg: #eee;
+    --ex-border-color: #ccc;
+    --ex-text-color: #222;
+    --ex-header-color: #111;
+}
+
+html.dark {
+    --ex-bg: #222;
+    --ex-active-bg: #333;
+    --ex-border-color: #555;
+    --ex-text-color: #ddd;
+    --ex-header-color: #eee;
+}
