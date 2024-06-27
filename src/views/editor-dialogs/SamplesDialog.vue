@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getSamplesMap } from '@/utils/seq-logic-samples';
 import { asyncComputed } from '@vueuse/core';
-import { ElInput, ElSpace, ElButton, ElDivider } from 'element-plus';
+import { ElInput } from 'element-plus';
 import { computed, ref } from 'vue';
-import { CenterLayout, HeaderText } from '@yyhhenry/element-extra';
+import { HeaderText } from '@yyhhenry/element-extra';
 import { Search } from '@element-plus/icons-vue';
 defineEmits<{
   (event: 'open', url: string): void;
@@ -17,23 +17,30 @@ const samples = computed(() =>
   text.value === ''
     ? allSamples.value
     : allSamples.value.filter(([name]) =>
-        name.toLowerCase().includes(text.value.toLowerCase()),
-      ),
+      name.toLowerCase().includes(text.value.toLowerCase()),
+    ),
 );
 </script>
 <template>
-  <ElInput v-model="text" :prefix-icon="Search"></ElInput>
-  <ElDivider />
-  <ElSpace wrap>
-    <ElButton
-      v-for="[name, url] of samples"
-      @click="$emit('open', url)"
-      :key="url"
-      :style="{ width: '200px' }"
-    >
-      <CenterLayout>
-        <HeaderText> {{ name }} </HeaderText>
-      </CenterLayout>
-    </ElButton>
-  </ElSpace>
+  <HeaderText> New From Samples </HeaderText>
+  <div :style="{ marginTop: '15px', marginBottom: '15px' }">
+    <ElInput v-model="text" :prefix-icon="Search"></ElInput>
+  </div>
+  <div v-for="[name, url] of samples" @click="$emit('open', url)" :key="url" :class="[$style.option]">
+    <HeaderText> {{ name }} </HeaderText>
+  </div>
 </template>
+
+<style module>
+.option {
+  margin-top: 5px;
+  padding: 20px;
+  background-color: var(--el-bg);
+  border-bottom: 1px solid var(--ex-border-color);
+}
+
+.option:hover {
+  cursor: pointer;
+  background-color: var(--ex-active-bg);
+}
+</style>

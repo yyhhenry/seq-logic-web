@@ -73,11 +73,14 @@ window.getSelection()?.empty();
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 .margin-right {
   margin-right: 10px;
 }
+
 .help-dialog {
   user-select: text;
+
   p {
     margin: 10px 0;
   }

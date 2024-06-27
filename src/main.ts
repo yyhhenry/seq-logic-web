@@ -1,5 +1,5 @@
 import '@yyhhenry/element-extra/dist/style.css';
-
+import '@/assets/color-set.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';

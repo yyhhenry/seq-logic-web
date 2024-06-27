@@ -690,11 +690,7 @@ const onShowUnits = () => {
           </ElLink>
           <template #dropdown>
             <div class="header-text">
-              <ElDropdownItem
-                :key="name"
-                v-for="name of getPopularUnits()"
-                @click="onAddUnit(name)"
-              >
+              <ElDropdownItem :key="name" v-for="name of getPopularUnits()" @click="onAddUnit(name)">
                 {{ name }}
               </ElDropdownItem>
               <ElDivider></ElDivider>
@@ -714,38 +710,26 @@ const onShowUnits = () => {
               <ElDropdownItem @click="onAddNode()">
                 Add Node (A)
               </ElDropdownItem>
-              <ElDropdownItem
-                :style="
-                  selectedItems.nodes.size
-                    ? {}
-                    : { color: 'var(--el-color-info)' }
-                "
-                @click="onAddWire()"
-              >
+              <ElDropdownItem :style="selectedItems.nodes.size
+                  ? {}
+                  : { color: 'var(--el-color-info)' }
+                " @click="onAddWire()">
                 Add Wire (W)
               </ElDropdownItem>
               <ElDropdownItem @click="onAddText()">
                 Add Text (T)
               </ElDropdownItem>
               <ElDivider></ElDivider>
-              <ElDropdownItem
-                :style="
-                  editorStatus !== 'idle'
-                    ? {}
-                    : { color: 'var(--el-color-info)' }
-                "
-                @click="onEscape()"
-              >
+              <ElDropdownItem :style="editorStatus !== 'idle'
+                  ? {}
+                  : { color: 'var(--el-color-info)' }
+                " @click="onEscape()">
                 Stop (Esc)
               </ElDropdownItem>
-              <ElDropdownItem
-                :style="
-                  editorStatus == 'idle' && hasSelectedItems
-                    ? {}
-                    : { color: 'var(--el-color-info)' }
-                "
-                @click="onDelete()"
-              >
+              <ElDropdownItem :style="editorStatus == 'idle' && hasSelectedItems
+                  ? {}
+                  : { color: 'var(--el-color-info)' }
+                " @click="onDelete()">
                 Delete (Del)
               </ElDropdownItem>
             </div>
@@ -760,12 +744,8 @@ const onShowUnits = () => {
             <div class="header-text">
               <ElDropdownItem @click="onUndo()"> Undo (Ctrl+Z) </ElDropdownItem>
               <ElDropdownItem @click="onRedo()"> Redo (Ctrl+Y) </ElDropdownItem>
-              <ElDropdownItem
-                :style="
-                  hasSelectedItems ? {} : { color: 'var(--el-color-info)' }
-                "
-                @click="onCopy()"
-              >
+              <ElDropdownItem :style="hasSelectedItems ? {} : { color: 'var(--el-color-info)' }
+                " @click="onCopy()">
                 Copy (Ctrl+C)
               </ElDropdownItem>
               <ElDropdownItem @click="onPaste()">
@@ -800,89 +780,44 @@ const onShowUnits = () => {
     </template>
     <ElContainer class="full-height full-width">
       <ElMain class="no-padding no-scroll">
-        <svg
-          class="full-height full-width"
-          ref="svgRef"
-          v-if="diagram !== undefined"
-          @mousemove="(e) => onMove(e)"
-          @wheel="(e) => onWheel(e)"
-          @mousedown="(e) => onMouseDown(e, 'blank', '')"
-          @mouseup="(e) => onMouseUp(e)"
-          @contextmenu="(e) => e.preventDefault()"
-        >
+        <svg class="full-height full-width" ref="svgRef" v-if="diagram !== undefined" @mousemove="(e) => onMove(e)"
+          @wheel="(e) => onWheel(e)" @mousedown="(e) => onMouseDown(e, 'blank', '')" @mouseup="(e) => onMouseUp(e)"
+          @contextmenu="(e) => e.preventDefault()">
           <g
-            :transform="`scale(${diagram?.viewport.scale}), translate(${diagram?.viewport.x}, ${diagram?.viewport.y})`"
-          >
+            :transform="`scale(${diagram?.viewport.scale}), translate(${diagram?.viewport.x}, ${diagram?.viewport.y})`">
             <g>
-              <path
-                :stroke="'var(--el-text-color-primary)'"
-                :stroke-width="2"
-                :fill="'none'"
-                d="M -40 0 L 1920 0 M 0 -40 L 0 1080"
-              ></path>
+              <path :stroke="'var(--el-text-color-primary)'" :stroke-width="2" :fill="'none'"
+                d="M -40 0 L 1920 0 M 0 -40 L 0 1080"></path>
             </g>
-            <g
-              v-for="[id, wire] of diagram.wires.entries()"
-              @mousedown="(e) => onMouseDown(e, 'wire', id)"
-              @contextmenu="(e) => onContextMenu(e, 'wire', id)"
-              :key="id"
-            >
-              <WireView
-                :wire="wire"
-                :selected="selectedItems.wires.has(id)"
-                :start="
-                  diagram.nodes.get(wire.start) ?? {
+            <g v-for="[id, wire] of diagram.wires.entries()" @mousedown="(e) => onMouseDown(e, 'wire', id)"
+              @contextmenu="(e) => onContextMenu(e, 'wire', id)" :key="id">
+              <WireView :wire="wire" :selected="selectedItems.wires.has(id)" :start="diagram.nodes.get(wire.start) ?? {
+                  x: 0,
+                  y: 0,
+                  powered: false,
+                }
+                " :end="diagram.nodes.get(wire.end) ?? {
                     x: 0,
                     y: 0,
                     powered: false,
                   }
-                "
-                :end="
-                  diagram.nodes.get(wire.end) ?? {
-                    x: 0,
-                    y: 0,
-                    powered: false,
-                  }
-                "
-                :start-status="diagram.getNodeStatus(wire.start)"
-              ></WireView>
+                  " :start-status="diagram.getNodeStatus(wire.start)"></WireView>
             </g>
-            <g
-              v-for="[id, node] of diagram.nodes.entries()"
-              @mousedown="(e) => onMouseDown(e, 'node', id)"
-              @contextmenu="(e) => onContextMenu(e, 'node', id)"
-              :key="id"
-            >
-              <NodeView
-                :node="node"
-                :selected="selectedItems.nodes.has(id)"
-                :status="diagram.getNodeStatus(id)"
-              />
+            <g v-for="[id, node] of diagram.nodes.entries()" @mousedown="(e) => onMouseDown(e, 'node', id)"
+              @contextmenu="(e) => onContextMenu(e, 'node', id)" :key="id">
+              <NodeView :node="node" :selected="selectedItems.nodes.has(id)" :status="diagram.getNodeStatus(id)" />
             </g>
-            <g
-              v-for="[id, text] of diagram.texts.entries()"
-              @mousedown="(e) => onMouseDown(e, 'text', id)"
-              @contextmenu="(e) => onContextMenu(e, 'text', id)"
-              :key="id"
-            >
+            <g v-for="[id, text] of diagram.texts.entries()" @mousedown="(e) => onMouseDown(e, 'text', id)"
+              @contextmenu="(e) => onContextMenu(e, 'text', id)" :key="id">
               <TextView :text="text" :selected="selectedItems.texts.has(id)" />
             </g>
-            <g
-              v-if="
-                mousePath?.mode == 'box-select' ||
-                mousePath?.mode == 'box-toggle-select'
-              "
-            >
-              <rect
-                :x="Math.min(mousePath.x, mouseInView.x)"
-                :y="Math.min(mousePath.y, mouseInView.y)"
-                :width="Math.abs(mousePath.x - mouseInView.x)"
-                :height="Math.abs(mousePath.y - mouseInView.y)"
-                :stroke="'var(--el-color-primary)'"
-                :stroke-width="1"
-                :stroke-dasharray="'3 2'"
-                :fill="'none'"
-              />
+            <g v-if="
+              mousePath?.mode == 'box-select' ||
+              mousePath?.mode == 'box-toggle-select'
+            ">
+              <rect :x="Math.min(mousePath.x, mouseInView.x)" :y="Math.min(mousePath.y, mouseInView.y)"
+                :width="Math.abs(mousePath.x - mouseInView.x)" :height="Math.abs(mousePath.y - mouseInView.y)"
+                :stroke="'var(--el-color-primary)'" :stroke-width="1" :stroke-dasharray="'3 2'" :fill="'none'" />
             </g>
           </g>
         </svg>
@@ -892,11 +827,7 @@ const onShowUnits = () => {
           <div class="margin-in-line" :title="'Status'">
             {{ editorStatus }}
           </div>
-          <div
-            class="margin-in-line"
-            :title="'Viewport'"
-            v-if="diagram !== undefined"
-          >
+          <div class="margin-in-line" :title="'Viewport'" v-if="diagram !== undefined">
             {{
               `${diagram.viewport.x.toFixed(2)}:${diagram.viewport.y.toFixed(
                 2,
@@ -919,28 +850,16 @@ const onShowUnits = () => {
     </ElContainer>
   </PageLayout>
   <ElDialog v-model="editNodeDialog" :title="'Edit Node'" :width="400">
-    <EditNode
-      :key="editNodeDialog ? 1 : 0"
-      v-if="diagram"
-      :diagram="diagram"
-      :id="[...selectedItems.nodes][0]"
-    ></EditNode>
+    <EditNode :key="editNodeDialog ? 1 : 0" v-if="diagram" :diagram="diagram" :id="[...selectedItems.nodes][0]">
+    </EditNode>
   </ElDialog>
   <ElDialog v-model="editWireDialog" :title="'Edit Wire'" :width="400">
-    <EditWire
-      :key="editWireDialog ? 1 : 0"
-      v-if="diagram"
-      :diagram="diagram"
-      :id="[...selectedItems.wires][0]"
-    ></EditWire>
+    <EditWire :key="editWireDialog ? 1 : 0" v-if="diagram" :diagram="diagram" :id="[...selectedItems.wires][0]">
+    </EditWire>
   </ElDialog>
   <ElDialog v-model="editTextDialog" :title="'Edit Text'" :width="400">
-    <EditText
-      :key="editTextDialog ? 1 : 0"
-      v-if="diagram"
-      :diagram="diagram"
-      :id="[...selectedItems.texts][0]"
-    ></EditText>
+    <EditText :key="editTextDialog ? 1 : 0" v-if="diagram" :diagram="diagram" :id="[...selectedItems.texts][0]">
+    </EditText>
   </ElDialog>
   <ElDialog v-model="helpDialog" :title="'Help'">
     <HelpDialog v-if="helpDialog"></HelpDialog>
@@ -950,40 +869,42 @@ const onShowUnits = () => {
     <p>Author: yyhhenry</p>
   </ElDialog>
   <ElDialog v-model="unitsDialog" :title="'Units'">
-    <UnitsDialog
-      v-if="unitsDialog"
-      @add="
-        (name) => {
-          unitsDialog = false;
-          onAddUnit(name);
-        }
-      "
-    ></UnitsDialog>
+    <UnitsDialog v-if="unitsDialog" @add="(name) => {
+        unitsDialog = false;
+        onAddUnit(name);
+      }
+      "></UnitsDialog>
   </ElDialog>
 </template>
 <style lang="scss" scoped>
 .no-padding {
   padding: 0;
 }
+
 .no-scroll {
   overflow: hidden;
 }
+
 .full-width {
   width: 100%;
 }
+
 .full-height {
   height: 100%;
 }
+
 .header-text {
   user-select: none;
   font-size: larger;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 .editor-footer {
   border-top: solid 2px var(--el-border-color);
   user-select: none;
 }
+
 .margin-in-line {
   margin-right: 10px;
 }

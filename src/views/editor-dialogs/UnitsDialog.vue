@@ -17,20 +17,15 @@ const units = computed(() =>
   text.value === ''
     ? allUnits.value
     : allUnits.value.filter((unit) =>
-        unit.toLowerCase().includes(text.value.toLowerCase()),
-      ),
+      unit.toLowerCase().includes(text.value.toLowerCase()),
+    ),
 );
 </script>
 <template>
   <ElInput v-model="text" :prefix-icon="Search"></ElInput>
   <ElDivider />
   <ElSpace wrap>
-    <ElButton
-      v-for="name of units"
-      @click="$emit('add', name)"
-      :key="name"
-      :style="{ width: '200px' }"
-    >
+    <ElButton v-for="name of units" @click="$emit('add', name)" :key="name" :style="{ width: '200px' }">
       <CenterLayout>
         <HeaderText> {{ name }}</HeaderText>
       </CenterLayout>
